@@ -1,28 +1,34 @@
-from pydantic import ValidationError
 import pytest
 
-from enums import CredentialMappingTypeEnum
-from enums.credential_format import CredentialFormatEnum
+from pydantic import ValidationError
+
+from enums import CredentialFormatEnum, CredentialMappingTypeEnum
 from schemas import CredentialMapping, CredentialTopic, CredentialType
+
+from tests.data import credential_type_spec, topic_spec, effective_date_mapping_spec
 
 
 def test_valid_credential_topic_schema():
     """Test valid CredentialTopic schema"""
 
-    data = {"type": "test-type", "source_id": {"path": "$.path.to.topic.source_id"}}
+    test_data = topic_spec.copy()
 
-    credential_topic = CredentialTopic(**data)
+    credential_topic = CredentialTopic(**test_data)
 
-    assert credential_topic.model_dump() == data
+    assert credential_topic.model_dump(exclude_none=True) == {
+        "type": test_data.get("type"),
+        "source_id": test_data.get("sourceId"),
+    }
 
 
 def test_invalid_credential_topic_schema_missing_type():
     """Test invalid CredentialTopic schema missing type"""
 
-    data = {"source_id": {"path": "$.path.to.topic.source_id"}}
+    test_data = topic_spec.copy()
+    del test_data["type"]
 
     with pytest.raises(ValidationError) as exc_info:
-        CredentialTopic(**data)
+        CredentialTopic(**test_data)
 
     errors = exc_info.value.errors()[0]
 
@@ -34,25 +40,29 @@ def test_invalid_credential_topic_schema_missing_type():
 def test_invalid_credential_topic_schema_missing_source_id():
     """Test invalid CredentialTopic schema missing source_id"""
 
-    data = {"type": "test-type"}
+    test_data = topic_spec.copy()
+    del test_data["sourceId"]
 
     with pytest.raises(ValidationError) as exc_info:
-        CredentialTopic(**data)
+        CredentialTopic(**test_data)
 
     errors = exc_info.value.errors()[0]
 
     assert errors.get("msg") == "Field required"
-    assert "source_id" in errors.get("loc")
+    assert "sourceId" in errors.get("loc")
     assert errors.get("type") == "missing"
 
 
 def test_invalid_credential_topic_schema_missing_source_id_path():
     """Test invalid CredentialTopic schema missing source_id path"""
 
-    data = {"type": "test-type", "source_id": {}}
+    test_data = {
+        **topic_spec.copy(),
+        "sourceId": {},
+    }
 
     with pytest.raises(ValidationError) as exc_info:
-        CredentialTopic(**data)
+        CredentialTopic(**test_data)
 
     errors = exc_info.value.errors()[0]
 
@@ -64,10 +74,13 @@ def test_invalid_credential_topic_schema_missing_source_id_path():
 def test_invalid_credential_topic_schema_invalid_source_id():
     """Test invalid CredentialTopic schema invalid source_id"""
 
-    data = {"type": "test-type", "source_id": "invalid"}
+    test_data = {
+        **topic_spec.copy(),
+        "sourceId": "invalid",
+    }
 
     with pytest.raises(ValidationError) as exc_info:
-        CredentialTopic(**data)
+        CredentialTopic(**test_data)
 
     errors = exc_info.value.errors()[0]
 
@@ -75,17 +88,20 @@ def test_invalid_credential_topic_schema_invalid_source_id():
         errors.get("msg")
         == "Input should be a valid dictionary or instance of PathBase"
     )
-    assert "source_id" in errors.get("loc")
+    assert "sourceId" in errors.get("loc")
     assert errors.get("type") == "model_type"
 
 
 def test_invalid_credential_topic_schema_invalid_source_id_path():
     """Test invalid CredentialTopic schema invalid source_id path"""
 
-    data = {"type": "test-type", "source_id": {"path": 123}}
+    test_data = {
+        **topic_spec.copy(),
+        "sourceId": {"path": 123},
+    }
 
     with pytest.raises(ValidationError) as exc_info:
-        CredentialTopic(**data)
+        CredentialTopic(**test_data)
 
     errors = exc_info.value.errors()[0]
 
@@ -97,27 +113,21 @@ def test_invalid_credential_topic_schema_invalid_source_id_path():
 def test_valid_credential_mapping_schema():
     """Test valid CredentialMapping schema"""
 
-    data = {
-        "path": "$.path.to.credential.effective_date",
-        "type": CredentialMappingTypeEnum.EFFECTIVE_DATE,
-        "name": "test_effective_date",
-    }
+    test_data = effective_date_mapping_spec.copy()
 
-    credential_mapping = CredentialMapping(**data)
+    credential_mapping = CredentialMapping(**test_data)
 
-    assert credential_mapping.model_dump() == data
+    assert credential_mapping.model_dump() == test_data
 
 
 def test_invalid_credential_mapping_schema_missing_path():
     """Test invalid CredentialMapping schema missing path"""
 
-    data = {
-        "type": CredentialMappingTypeEnum.EFFECTIVE_DATE,
-        "name": "test_effective_date",
-    }
+    test_data = effective_date_mapping_spec.copy()
+    del test_data["path"]
 
     with pytest.raises(ValidationError) as exc_info:
-        CredentialMapping(**data)
+        CredentialMapping(**test_data)
 
     errors = exc_info.value.errors()[0]
 
@@ -129,13 +139,11 @@ def test_invalid_credential_mapping_schema_missing_path():
 def test_invalid_credential_mapping_schema_missing_type():
     """Test invalid CredentialMapping schema missing type"""
 
-    data = {
-        "path": "$.path.to.credential.effective_date",
-        "name": "test_effective_date",
-    }
+    test_data = effective_date_mapping_spec.copy()
+    del test_data["type"]
 
     with pytest.raises(ValidationError) as exc_info:
-        CredentialMapping(**data)
+        CredentialMapping(**test_data)
 
     errors = exc_info.value.errors()[0]
 
@@ -147,13 +155,11 @@ def test_invalid_credential_mapping_schema_missing_type():
 def test_invalid_credential_mapping_schema_missing_name():
     """Test invalid CredentialMapping schema missing name"""
 
-    data = {
-        "path": "$.path.to.credential.effective_date",
-        "type": CredentialMappingTypeEnum.EFFECTIVE_DATE,
-    }
+    test_data = effective_date_mapping_spec.copy()
+    del test_data["name"]
 
     with pytest.raises(ValidationError) as exc_info:
-        CredentialMapping(**data)
+        CredentialMapping(**test_data)
 
     errors = exc_info.value.errors()[0]
 
@@ -165,14 +171,13 @@ def test_invalid_credential_mapping_schema_missing_name():
 def test_invalid_credential_mapping_schema_invalid_path():
     """Test invalid CredentialMapping schema invalid path"""
 
-    data = {
+    test_data = {
+        **effective_date_mapping_spec.copy(),
         "path": 123,
-        "type": CredentialMappingTypeEnum.EFFECTIVE_DATE,
-        "name": "test_effective_date",
     }
 
     with pytest.raises(ValidationError) as exc_info:
-        CredentialMapping(**data)
+        CredentialMapping(**test_data)
 
     errors = exc_info.value.errors()[0]
 
@@ -181,21 +186,20 @@ def test_invalid_credential_mapping_schema_invalid_path():
     assert errors.get("type") == "string_type"
 
 
-def test_invalid_credential_mapping_schema_invalid_mapping():
+def test_invalid_credential_mapping_schema_invalid_mapping_type():
     """Test invalid CredentialMapping schema invalid mapping"""
 
-    data = {
-        "path": "$.path.to.credential.effective_date",
+    test_data = {
+        **effective_date_mapping_spec.copy(),
         "type": "invalid",
-        "name": "test_effective_date",
     }
 
     with pytest.raises(ValidationError) as exc_info:
-        CredentialMapping(**data)
+        CredentialMapping(**test_data)
 
     errors = exc_info.value.errors()[0]
 
-    assert errors.get("msg") == "Input should be 'effective_date' or 'expiry_date'"
+    assert errors.get("msg") == "Input should be 'effective_date' or 'revoked_date'"
     assert "type" in errors.get("loc")
     assert errors.get("type") == "enum"
 
@@ -203,83 +207,74 @@ def test_invalid_credential_mapping_schema_invalid_mapping():
 def test_valid_credential_type_schema():
     """Test valid CredentialType schema"""
 
-    data = {
-        "format": CredentialFormatEnum.VC_DI,
-        "type": "BCPetroleum&NaturalGasTitle",
-        "version": "1.0",
-        "verification_methods": ["did:key:for:issuer"],
+    credential_type = CredentialType(**credential_type_spec)
+    credential_type_output = credential_type.model_dump(exclude_none=True)
+
+    assert credential_type_output == {
+        "format": str(credential_type_spec.get("format")),
+        "type": credential_type_spec.get("type"),
+        "version": credential_type_spec.get("version"),
+        "verification_methods": credential_type_spec.get("verificationMethods"),
         "topic": {
-            "type": "registration.registries.ca",
-            "source_id": {"path": "$.path.to.topic.source_id"},
+            "type": topic_spec.get("type"),
+            "source_id": topic_spec.get("sourceId"),
         },
-        "mappings": [
-            {
-                "type": CredentialMappingTypeEnum.EFFECTIVE_DATE,
-                "name": "test_effective_date",
-                "path": "$.path.to.credential.effective_date",
-            }
-        ],
+        "mappings": credential_type_spec.get("mappings"),
     }
-
-    credential_type = CredentialType(**data)
-
-    assert credential_type.model_dump(exclude_none=True) == data
 
 
 def test_valid_credential_type_schema_no_mappings():
     """Test valid CredentialType schema with no mappings"""
 
-    data = {
-        "format": CredentialFormatEnum.VC_DI,
-        "type": "BCPetroleum&NaturalGasTitle",
-        "version": "1.0",
-        "verification_methods": ["did:key:for:issuer"],
+    test_data = credential_type_spec.copy()
+    del test_data["mappings"]
+
+    credential_type = CredentialType(**test_data)
+    credential_type_output = credential_type.model_dump(exclude_none=True)
+
+    assert credential_type_output == {
+        "format": str(credential_type_spec.get("format")),
+        "type": credential_type_spec.get("type"),
+        "version": credential_type_spec.get("version"),
+        "verification_methods": credential_type_spec.get("verificationMethods"),
         "topic": {
-            "type": "registration.registries.ca",
-            "source_id": {"path": "$.path.to.topic.source_id"},
+            "type": topic_spec.get("type"),
+            "source_id": topic_spec.get("sourceId"),
         },
     }
-
-    credential_type = CredentialType(**data)
-
-    assert credential_type.model_dump(exclude_none=True) == data
+    assert "mappings" not in credential_type_output
 
 
 def test_valid_credential_type_schema_empty_mappings():
     """Test valid CredentialType schema with empty mappings"""
 
-    data = {
-        "format": CredentialFormatEnum.VC_DI,
-        "type": "BCPetroleum&NaturalGasTitle",
-        "version": "1.0",
-        "verification_methods": ["did:key:for:issuer"],
+    test_data = credential_type_spec.copy()
+    test_data["mappings"] = []
+
+    credential_type = CredentialType(**test_data)
+    credential_type_output = credential_type.model_dump(exclude_none=True)
+
+    assert credential_type_output == {
+        "format": str(credential_type_spec.get("format")),
+        "type": credential_type_spec.get("type"),
+        "version": credential_type_spec.get("version"),
+        "verification_methods": credential_type_spec.get("verificationMethods"),
         "topic": {
-            "type": "registration.registries.ca",
-            "source_id": {"path": "$.path.to.topic.source_id"},
+            "type": topic_spec.get("type"),
+            "source_id": topic_spec.get("sourceId"),
         },
         "mappings": [],
     }
-
-    credential_type = CredentialType(**data)
-
-    assert credential_type.model_dump(exclude_none=True) == data
 
 
 def test_invalid_credential_type_schema_missing_format():
     """Test invalid CredentialType schema missing format"""
 
-    data = {
-        "type": "BCPetroleum&NaturalGasTitle",
-        "version": "1.0",
-        "verification_methods": ["did:key:for:issuer"],
-        "topic": {
-            "type": "registration.registries.ca",
-            "source_id": {"path": "$.path.to.topic.source_id"},
-        },
-    }
+    test_data = credential_type_spec.copy()
+    del test_data["format"]
 
     with pytest.raises(ValidationError) as exc_info:
-        CredentialType(**data)
+        CredentialType(**test_data)
 
     errors = exc_info.value.errors()[0]
 
@@ -291,18 +286,11 @@ def test_invalid_credential_type_schema_missing_format():
 def test_invalid_credential_type_schema_missing_type():
     """Test invalid CredentialType schema missing type"""
 
-    data = {
-        "format": CredentialFormatEnum.VC_DI,
-        "version": "1.0",
-        "verification_methods": ["did:key:for:issuer"],
-        "topic": {
-            "type": "registration.registries.ca",
-            "source_id": {"path": "$.path.to.topic.source_id"},
-        },
-    }
+    test_data = credential_type_spec.copy()
+    del test_data["type"]
 
     with pytest.raises(ValidationError) as exc_info:
-        CredentialType(**data)
+        CredentialType(**test_data)
 
     errors = exc_info.value.errors()[0]
 
@@ -314,18 +302,11 @@ def test_invalid_credential_type_schema_missing_type():
 def test_invalid_credential_type_schema_missing_version():
     """Test invalid CredentialType schema missing version"""
 
-    data = {
-        "format": CredentialFormatEnum.VC_DI,
-        "type": "BCPetroleum&NaturalGasTitle",
-        "verification_methods": ["did:key:for:issuer"],
-        "topic": {
-            "type": "registration.registries.ca",
-            "source_id": {"path": "$.path.to.topic.source_id"},
-        },
-    }
+    test_data = credential_type_spec.copy()
+    del test_data["version"]
 
     with pytest.raises(ValidationError) as exc_info:
-        CredentialType(**data)
+        CredentialType(**test_data)
 
     errors = exc_info.value.errors()[0]
 
@@ -337,38 +318,27 @@ def test_invalid_credential_type_schema_missing_version():
 def test_invalid_credential_type_schema_missing_verification_methods():
     """Test invalid CredentialType schema missing verification_methods"""
 
-    data = {
-        "format": CredentialFormatEnum.VC_DI,
-        "type": "BCPetroleum&NaturalGasTitle",
-        "version": "1.0",
-        "topic": {
-            "type": "registration.registries.ca",
-            "source_id": {"path": "$.path.to.topic.source_id"},
-        },
-    }
+    test_data = credential_type_spec.copy()
+    del test_data["verificationMethods"]
 
     with pytest.raises(ValidationError) as exc_info:
-        CredentialType(**data)
+        CredentialType(**test_data)
 
     errors = exc_info.value.errors()[0]
 
     assert errors.get("msg") == "Field required"
-    assert "verification_methods" in errors.get("loc")
+    assert "verificationMethods" in errors.get("loc")
     assert errors.get("type") == "missing"
 
 
 def test_invalid_credential_type_schema_missing_topic():
     """Test invalid CredentialType schema missing topic"""
 
-    data = {
-        "format": CredentialFormatEnum.VC_DI,
-        "type": "BCPetroleum&NaturalGasTitle",
-        "version": "1.0",
-        "verification_methods": ["did:key:for:issuer"],
-    }
+    test_data = credential_type_spec.copy()
+    del test_data["topic"]
 
     with pytest.raises(ValidationError) as exc_info:
-        CredentialType(**data)
+        CredentialType(**test_data)
 
     errors = exc_info.value.errors()[0]
 
@@ -380,19 +350,13 @@ def test_invalid_credential_type_schema_missing_topic():
 def test_invalid_credential_type_schema_invalid_format():
     """Test invalid CredentialType schema invalid format"""
 
-    data = {
+    test_data = {
+        **credential_type_spec.copy(),
         "format": "invalid",
-        "type": "BCPetroleum&NaturalGasTitle",
-        "version": "1.0",
-        "verification_methods": ["did:key:for:issuer"],
-        "topic": {
-            "type": "registration.registries.ca",
-            "source_id": {"path": "$.path.to.topic.source_id"},
-        },
     }
 
     with pytest.raises(ValidationError) as exc_info:
-        CredentialType(**data)
+        CredentialType(**test_data)
 
     errors = exc_info.value.errors()[0]
 
@@ -404,69 +368,49 @@ def test_invalid_credential_type_schema_invalid_format():
 def test_invalid_credential_type_schema_invalid_verification_methods():
     """Test invalid CredentialType schema invalid verification_methods"""
 
-    data = {
-        "format": CredentialFormatEnum.VC_DI,
-        "type": "BCPetroleum&NaturalGasTitle",
-        "version": "1.0",
-        "verification_methods": "invalid",
-        "topic": {
-            "type": "registration.registries.ca",
-            "source_id": {"path": "$.path.to.topic.source_id"},
-        },
+    test_data = {
+        **credential_type_spec.copy(),
+        "verificationMethods": "invalid",
     }
 
     with pytest.raises(ValidationError) as exc_info:
-        CredentialType(**data)
+        CredentialType(**test_data)
 
     errors = exc_info.value.errors()[0]
 
     assert errors.get("msg") == "Input should be a valid list"
-    assert "verification_methods" in errors.get("loc")
+    assert "verificationMethods" in errors.get("loc")
     assert errors.get("type") == "list_type"
 
 
 def test_invalid_credential_type_schema_invalid_oca_bundle():
     """Test invalid CredentialType schema invalid oca_bundle"""
 
-    data = {
-        "format": CredentialFormatEnum.VC_DI,
-        "type": "BCPetroleum&NaturalGasTitle",
-        "version": "1.0",
-        "verification_methods": ["did:key:for:issuer"],
-        "oca_bundle": "invalid",
-        "topic": {
-            "type": "registration.registries.ca",
-            "source_id": {"path": "$.path.to.topic.source_id"},
-        },
+    test_data = {
+        **credential_type_spec.copy(),
+        "ocaBundle": "invalid",
     }
 
     with pytest.raises(ValidationError) as exc_info:
-        CredentialType(**data)
+        CredentialType(**test_data)
 
     errors = exc_info.value.errors()[0]
 
     assert errors.get("msg") == "Input should be a valid dictionary"
-    assert "oca_bundle" in errors.get("loc")
+    assert "ocaBundle" in errors.get("loc")
     assert errors.get("type") == "dict_type"
 
 
 def test_invalid_credential_type_schema_invalid_mappings():
     """Test invalid CredentialType schema invalid mappings"""
 
-    data = {
-        "format": CredentialFormatEnum.VC_DI,
-        "type": "BCPetroleum&NaturalGasTitle",
-        "version": "1.0",
-        "verification_methods": ["did:key:for:issuer"],
-        "topic": {
-            "type": "registration.registries.ca",
-            "source_id": {"path": "$.path.to.topic.source_id"},
-        },
+    test_data = {
+        **credential_type_spec.copy(),
         "mappings": "invalid",
     }
 
     with pytest.raises(ValidationError) as exc_info:
-        CredentialType(**data)
+        CredentialType(**test_data)
 
     errors = exc_info.value.errors()[0]
 

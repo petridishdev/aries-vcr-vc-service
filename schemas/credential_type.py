@@ -1,3 +1,6 @@
+from typing import Annotated
+
+from fastapi import Body
 from enums import CredentialFormatEnum
 from schemas import CredentialMapping, CredentialTopic
 from pydantic import BaseModel
@@ -9,7 +12,13 @@ class CredentialType(BaseModel):
     format: CredentialFormatEnum
     type: str
     version: str
-    verification_methods: list[str]
-    oca_bundle: dict | None = None
+    verification_methods: Annotated[
+        list[str],
+        Body(
+            validation_alias="verificationMethods",
+            serialization_alias="verificationMethods",
+        ),
+    ]
+    oca_bundle: Annotated[dict | None, Body(validation_alias="ocaBundle")] = None
     topic: CredentialTopic
     mappings: list[CredentialMapping] | None = None
