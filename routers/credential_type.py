@@ -16,21 +16,21 @@ router = APIRouter(prefix="/credential-types", tags=["credential-types"])
     response_model_by_alias=True,
 )
 async def register_credential_type(
-    signed_credential_type: SecuredDocument[SignedCredentialType],
+    secured_credential_type: SecuredDocument[SignedCredentialType],
 ):
     """Register a new credential type"""
 
     try:
-        credential_type_data = signed_credential_type.secured_document.model_dump(
+        secured_credential_type_data = secured_credential_type.model_dump(
             by_alias=True, exclude_none=True
         )
-        vcr_credential_type = VCRCredentialType(**credential_type_data)
+        vcr_credential_type = VCRCredentialType(**secured_credential_type_data)
 
         # TODO: This needs to have a defined schema
         data = {
             "issuer": {
                 "name": "test-issuer",
-                "did": signed_credential_type.secured_document.verification_methods[0],
+                "did": secured_credential_type.secured_document.verification_methods[0],
                 "abbreviation": "",
                 "email": "",
                 "url": "",
@@ -53,4 +53,4 @@ async def register_credential_type(
             media_type="application/json",
         )
 
-    return signed_credential_type
+    return secured_credential_type

@@ -27,7 +27,7 @@ credential_type_spec = {
     ],
 }
 
-signed_credential_type_spec = {
+secured_credential_type_spec = {
     "securedDocument": {
         "format": "vc_di",
         "type": "BCPetroleum&NaturalGasTitle",
@@ -49,7 +49,7 @@ signed_credential_type_spec = {
             #     "path": "$.credentialSubject.issuedTo.legalName",
             # },
         ],
-        "ressources": [
+        "resources": [
             {
                 "type": "OverlayCaptureBundle",
                 "id": "https://opsecid.github.io/orgbook-registrations/credentials/BCPetroleum&NaturalGasTitle/0.1/OCABundle.json",

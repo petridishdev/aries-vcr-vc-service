@@ -1,12 +1,15 @@
+import copy
 from schemas.mappings import VCRCredentialType
 
-from tests.data import credential_type_spec
+from tests.data import secured_credential_type_spec
 
 
 def test_valid_vcr_credential_type_output():
     """Test the output of the VCRCredentialType model."""
 
-    vcr_credential_type = VCRCredentialType(**credential_type_spec)
+    test_data = copy.deepcopy(secured_credential_type_spec)
+
+    vcr_credential_type = VCRCredentialType(**test_data)
     vcr_credential_type_output = vcr_credential_type.model_dump(
         by_alias=True, exclude_none=True
     )
@@ -14,32 +17,33 @@ def test_valid_vcr_credential_type_output():
     assert vcr_credential_type_output == {
         "format": "vc_di",
         "schema": "BCPetroleum&NaturalGasTitle",
-        "version": "1.0",
-        "origin_did": "did:key:for:issuer",
+        "version": "0.1",
+        "origin_did": "did:web:untp.traceability.site:parties:regulators:director-of-petroleum-lands#multikey",
         "topic": {
             "type": "registration.registries.ca",
-            "source_id": {"path": "$.path.to.topic.source_id"},
+            "source_id": {"path": "$.credentialSubject.issuedTo.identifier"},
         },
         "mappings": [
             {
                 "type": "effective_date",
-                "name": "test_effective_date",
-                "path": "$.path.to.credential.effective_date",
+                "name": "effective_date",
+                "path": "$.validFrom",
             },
             {
                 "type": "revoked_date",
-                "name": "test_expiry_date",
-                "path": "$.path.to.credential.expiry_date",
+                "name": "revoked_date",
+                "path": "$.validUntil",
             },
         ],
         "credential": {
             "effective_date": {
-                "name": "test_effective_date",
-                "path": "$.path.to.credential.effective_date",
+                "name": "effective_date",
+                "path": "$.validFrom",
             },
             "revoked_date": {
-                "name": "test_expiry_date",
-                "path": "$.path.to.credential.expiry_date",
+                "name": "revoked_date",
+                "path": "$.validUntil",
             },
         },
+        "raw_data": test_data,
     }

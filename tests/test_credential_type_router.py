@@ -1,6 +1,7 @@
+import copy
 from fastapi.testclient import TestClient
 
-from tests.data import signed_credential_type_spec
+from tests.data import secured_credential_type_spec
 
 from main import app
 
@@ -10,7 +11,9 @@ client = TestClient(app)
 def test_register_credential_type():
     """Test register_credential_type"""
 
-    response = client.post("/credential-types/", json=signed_credential_type_spec)
+    response = client.post(
+        "/credential-types/", json=copy.deepcopy(secured_credential_type_spec)
+    )
     assert response.status_code == 201
 
 
@@ -82,7 +85,7 @@ def test_register_credential_type_invalid_secured_document():
 def test_register_credential_type_invalid_topic():
     """Test register_credential_type with invalid topic"""
 
-    test_data = signed_credential_type_spec.copy()
+    test_data = copy.deepcopy(secured_credential_type_spec)
 
     test_data["securedDocument"]["topic"] = {
         "type": "registration.registries.ca",
