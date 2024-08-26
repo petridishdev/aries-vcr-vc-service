@@ -2,7 +2,6 @@ import pytest
 
 from pydantic import ValidationError
 
-from enums import CredentialFormatEnum, CredentialMappingTypeEnum
 from schemas import CredentialMapping, CredentialTopic, CredentialType
 
 from tests.data import credential_type_spec, topic_spec, effective_date_mapping_spec
