@@ -1,7 +1,7 @@
 from enums import CredentialMappingTypeEnum
-from schemas import PathBase
+from schemas import Path
 
-class CredentialMapping(PathBase):
+class CredentialMapping(Path):
     """CredentialMapping schema"""
 
     type: CredentialMappingTypeEnum

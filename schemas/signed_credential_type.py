@@ -1,8 +1,5 @@
-from pydantic import model_serializer
-from schemas import CredentialType, DataIntegrityProof
+from schemas import Signed, CredentialType
 
 
-class SignedCredentialType(CredentialType):
+class SignedCredentialType(Signed, CredentialType):
     """SignedCredentialType schema"""
-
-    proof: list[DataIntegrityProof] | list | None = None

@@ -85,7 +85,7 @@ def test_invalid_credential_topic_schema_invalid_source_id():
 
     assert (
         errors.get("msg")
-        == "Input should be a valid dictionary or instance of PathBase"
+        == "Input should be a valid dictionary or instance of Path"
     )
     assert "sourceId" in errors.get("loc")
     assert errors.get("type") == "model_type"
