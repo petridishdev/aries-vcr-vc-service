@@ -198,7 +198,7 @@ def test_invalid_credential_mapping_schema_invalid_mapping_type():
 
     errors = exc_info.value.errors()[0]
 
-    assert errors.get("msg") == "Input should be 'effective_date' or 'revoked_date'"
+    assert errors.get("msg") == "Input should be 'effective_date', 'expiry_date' or 'revoked_date'"
     assert "type" in errors.get("loc")
     assert errors.get("type") == "enum"
 

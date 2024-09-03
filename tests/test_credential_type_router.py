@@ -78,6 +78,12 @@ def test_register_credential_type_invalid_secured_document():
                 "msg": "Field required",
                 "type": "missing",
             },
+            {
+                "input": {},
+                "loc": ["body", "securedDocument", "proof"],
+                "msg": "Field required",
+                "type": "missing",
+            },
         ]
     }
 
@@ -100,10 +106,13 @@ def test_register_credential_type_invalid_topic():
     assert response.json() == {
         "detail": [
             {
+                "ctx": {
+                    "class_name": "Path",
+                },
                 "input": "invalid_source_id",
                 "loc": ["body", "securedDocument", "topic", "sourceId"],
-                "msg": "Input should be a valid dictionary or object to extract fields from",
-                "type": "model_attributes_type",
+                "msg": "Input should be a valid dictionary or instance of Path",
+                "type": "model_type",
             },
         ]
     }

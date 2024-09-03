@@ -17,10 +17,10 @@ def test_valid_vcr_credential_type_output():
     assert vcr_credential_type_output == {
         "format": "vc_di",
         "schema": "BCPetroleum&NaturalGasTitle",
-        "version": "0.1",
-        "origin_did": "did:web:untp.traceability.site:parties:regulators:director-of-petroleum-lands#multikey",
+        "version": "0.2",
+        "origin_did": "did:web:untp.traceability.site:parties:regulators:director-of-petroleum-lands",
         "topic": {
-            "type": "registration.registries.ca",
+            "type": "my-registration.city-of-vancouver",
             "source_id": {"path": "$.credentialSubject.issuedTo.identifier"},
         },
         "mappings": [
@@ -30,8 +30,8 @@ def test_valid_vcr_credential_type_output():
                 "path": "$.validFrom",
             },
             {
-                "type": "revoked_date",
-                "name": "revoked_date",
+                "type": "expiry_date",
+                "name": "expiry_date",
                 "path": "$.validUntil",
             },
         ],
@@ -40,10 +40,10 @@ def test_valid_vcr_credential_type_output():
                 "name": "effective_date",
                 "path": "$.validFrom",
             },
-            "revoked_date": {
-                "name": "revoked_date",
-                "path": "$.validUntil",
-            },
+            # "revoked_date": {
+            #     "name": "revoked_date",
+            #     "path": "$.validUntil",
+            # },
         },
-        "raw_data": test_data,
+        "raw_data": test_data.get("securedDocument"),
     }
