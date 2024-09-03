@@ -13,3 +13,14 @@ async def register_credential_type(credential_type):
         response = await client.post("/vc_di_credential_type/", json=credential_type)
         response.raise_for_status()
         return response.json()
+
+async def issue_credential(credential):
+    """Issue a new credential"""
+
+    # Make an HTTP request to the Aries VCR API
+    async with AsyncClient(
+        base_url="http://host.docker.internal:8008/agentcb/topic"
+    ) as client:
+        response = await client.post("/vc_di_credential/", json=credential)
+        response.raise_for_status()
+        return response.json()

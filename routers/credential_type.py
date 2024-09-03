@@ -30,7 +30,7 @@ async def register_credential_type(
         data = {
             "issuer": {
                 "name": "test-issuer",
-                "did": secured_credential_type.secured_document.verification_methods[0],
+                "did": secured_credential_type.secured_document.origin_did,
                 "abbreviation": "",
                 "email": "",
                 "url": "",
