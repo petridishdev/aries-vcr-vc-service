@@ -1,17 +1,13 @@
 from typing import Annotated
 
 from fastapi import Body
-from enums import CredentialFormatEnum
-from schemas import CredentialMapping, CredentialTopic
+from schemas import CredentialMapping, CredentialTopic, Options
 from pydantic import BaseModel
 
 
-class CredentialType(BaseModel):
+class CredentialType(Options, BaseModel):
     """CredentialType schema"""
 
-    format: CredentialFormatEnum
-    type: str
-    version: str
     verification_methods: Annotated[
         list[str],
         Body(
