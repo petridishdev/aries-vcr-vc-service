@@ -5,15 +5,28 @@ from schemas import SecuredDocument, SignedCredentialType
 from schemas.mappings import VCRCredentialType
 from services import vcr as vcr_service
 
-router = APIRouter(prefix="/credential-types", tags=["credential-types"])
+router = APIRouter(
+    prefix="/credential-types",
+    tags=["credential-types"],
+    redirect_slashes=False,
+)
+
+response_model = {
+    "response_model": SecuredDocument[SignedCredentialType],
+    "response_model_exclude_none": True,
+    "response_model_by_alias": True,
+}
 
 
 @router.post(
+    "",
+    status_code=status.HTTP_201_CREATED,
+    **response_model,
+)
+@router.post(
     "/",
     status_code=status.HTTP_201_CREATED,
-    response_model=SecuredDocument[SignedCredentialType],
-    response_model_exclude_none=True,
-    response_model_by_alias=True,
+    **response_model,
 )
 async def register_credential_type(
     secured_credential_type: SecuredDocument[SignedCredentialType],
