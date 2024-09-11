@@ -5,15 +5,25 @@ from schemas import SecuredCredentialWithOptions
 from schemas.mappings.vcr_credential import VCRCredential
 from services import vcr as vcr_service
 
-router = APIRouter(prefix="/credentials", tags=["credentials"])
+router = APIRouter(prefix="/credentials", tags=["credentials"], redirect_slashes=False)
+
+
+response_model = {
+    "response_model": SecuredCredentialWithOptions,
+    "response_model_exclude_none": True,
+    "response_model_by_alias": True,
+}
 
 
 @router.post(
+    "",
+    status_code=status.HTTP_201_CREATED,
+    **response_model,
+)
+@router.post(
     "/",
     status_code=status.HTTP_201_CREATED,
-    response_model=SecuredCredentialWithOptions,
-    response_model_exclude_none=True,
-    response_model_by_alias=True,
+    **response_model,
 )
 async def issue_credential(secured_credential: SecuredCredentialWithOptions):
     """Issue a new credential"""
@@ -33,9 +43,7 @@ async def issue_credential(secured_credential: SecuredCredentialWithOptions):
         print(e)
         return Response(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            content=json.dumps(
-                {"error": "There was an error issuing the credential"}
-            ),
+            content=json.dumps({"error": "There was an error issuing the credential"}),
             media_type="application/json",
         )
 
