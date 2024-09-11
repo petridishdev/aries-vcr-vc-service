@@ -83,10 +83,7 @@ def test_invalid_credential_topic_schema_invalid_source_id():
 
     errors = exc_info.value.errors()[0]
 
-    assert (
-        errors.get("msg")
-        == "Input should be a valid dictionary or instance of Path"
-    )
+    assert errors.get("msg") == "Input should be a valid dictionary or instance of Path"
     assert "sourceId" in errors.get("loc")
     assert errors.get("type") == "model_type"
 
@@ -198,7 +195,10 @@ def test_invalid_credential_mapping_schema_invalid_mapping_type():
 
     errors = exc_info.value.errors()[0]
 
-    assert errors.get("msg") == "Input should be 'effective_date', 'expiry_date' or 'revoked_date'"
+    assert (
+        errors.get("msg")
+        == "Input should be 'effective_date', 'expiry_date' or 'revoked_date'"
+    )
     assert "type" in errors.get("loc")
     assert errors.get("type") == "enum"
 

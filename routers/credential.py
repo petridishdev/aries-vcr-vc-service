@@ -33,9 +33,7 @@ async def issue_credential(secured_credential: SecuredCredentialWithOptions):
         print(e)
         return Response(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            content=json.dumps(
-                {"error": "There was an error issuing the credential"}
-            ),
+            content=json.dumps({"error": "There was an error issuing the credential"}),
             media_type="application/json",
         )
 
