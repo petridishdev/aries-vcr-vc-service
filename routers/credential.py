@@ -14,6 +14,7 @@ response_model = {
     "response_model_by_alias": True,
 }
 
+
 @router.post(
     "",
     status_code=status.HTTP_201_CREATED,
