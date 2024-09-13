@@ -21,6 +21,7 @@ response_model = {
 @router.post(
     "",
     status_code=status.HTTP_201_CREATED,
+    include_in_schema=False,
     **response_model,
 )
 @router.post(
