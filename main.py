@@ -6,3 +6,7 @@ from routers.credential_type import router as credential_type
 app = FastAPI()
 app.include_router(credential)
 app.include_router(credential_type)
+
+@app.get("/health")
+async def health_check():
+    return {"status": "ok"}
