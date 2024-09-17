@@ -6,7 +6,7 @@ from app.models.enums import CredentialFormatEnum
 class CredentialTypeOptions(BaseModel):
     """Options schema"""
 
-    issuerId: str = Field(example="did:web:example.com")
+    issuer_id: str = Field(alias="issuerId", example="did:web:example.com")
 
 
 class CredentialOptions(BaseModel):
