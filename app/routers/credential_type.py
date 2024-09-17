@@ -52,7 +52,7 @@ async def register_credential_type(
                 credential_type=credential_type, options=options
             ).model_dump(),
         }
-        await vcr_service.register_credential_type(data)
+        # await vcr_service.register_credential_type(data)
         return JSONResponse(status_code=201, content=data)
     except Exception as e:
         # TODO: Log the error

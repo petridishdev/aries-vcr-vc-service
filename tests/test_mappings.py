@@ -1,18 +1,16 @@
 import copy
-from schemas.mappings import VCRCredentialType
+from app.models.mappings import VCRCredentialType
 
-from tests.data import secured_credential_type_spec
+from tests.data import credential_type_request
 
 
 def test_valid_vcr_credential_type_output():
     """Test the output of the VCRCredentialType model."""
 
-    test_data = copy.deepcopy(secured_credential_type_spec)
+    test_data = copy.deepcopy(credential_type_request)
 
-    vcr_credential_type = VCRCredentialType(**test_data)
-    vcr_credential_type_output = vcr_credential_type.model_dump(
-        by_alias=True, exclude_none=True
-    )
+    vcr_credential_type = VCRCredentialType(credential_type=test_data['credentialType'], options=test_data['options'])
+    vcr_credential_type_output = vcr_credential_type.model_dump()
 
     assert vcr_credential_type_output == {
         "format": "vc_di",
@@ -45,5 +43,5 @@ def test_valid_vcr_credential_type_output():
             #     "path": "$.validUntil",
             # },
         },
-        "raw_data": test_data.get("securedDocument"),
+        "raw_data": test_data.get("credentialType"),
     }

@@ -1,3 +1,8 @@
+TEST_DID = "did:web:example.com"
+TEST_KID = f'{TEST_DID}#key-01'
+TEST_CREDENTIAL_ID = "https://orgbook.devops.gov.bc.ca/entities/81011e4c-979d-436c-b98c-9412daafd5de/credentials/203296ac-6d8f-4988-9d7f-d23d3ca36db4"
+TEST_CREDENTIAL_TYPE = "ExampleCredential"
+
 topic_spec = {
     "type": "my-registration.city-of-vancouver",
     "sourceId": {"path": "$.path.to.topic.source_id"},
@@ -17,9 +22,9 @@ expiry_date_mapping_spec = {
 
 credential_type_spec = {
     "format": "vc_di",
-    "type": "BCPetroleum&NaturalGasTitle",
+    "type": TEST_CREDENTIAL_TYPE,
     "version": "1.0",
-    "verificationMethods": ["did:key:for:issuer"],
+    "verificationMethods": [TEST_KID],
     "topic": topic_spec,
     "mappings": [
         effective_date_mapping_spec,
@@ -27,62 +32,53 @@ credential_type_spec = {
     ],
 }
 
-secured_credential_type_spec = {
-    "securedDocument": {
+credential_type_request = {
+    "credentialType": {
+        "type": TEST_CREDENTIAL_TYPE,
         "format": "vc_di",
-        "type": "BCPetroleum&NaturalGasTitle",
-        "name": "BC Petroleum & Natural Gas Title",
         "version": "0.0.3",
+        "issuer": TEST_DID,
         "verificationMethods": [
-            "did:web:untp.traceability.site:parties:regulators:director-of-petroleum-lands#multikey"
+            TEST_KID
         ],
         "topic": {
             "type": "my-registration.city-of-vancouver",
-            "sourceId": {"path": "$.credentialSubject.issuedTo.identifier"},
+            "sourceId": {"path": "$.credentialSubject.identifier"},
         },
+        "ocaBundle": {},
         "mappings": [
             {"type": "effective_date", "name": "effective_date", "path": "$.validFrom"},
-            {"type": "expiry_date", "name": "expiry_date", "path": "$.validUntil"},
-            # {
-            #     "type": "title_holder",
-            #     "name": "title_holder",
-            #     "path": "$.credentialSubject.issuedTo.legalName",
-            # },
-        ],
-        "resources": [
-            {
-                "type": "OverlayCaptureBundle",
-                "id": "https://opsecid.github.io/orgbook-registrations/credentials/BCPetroleum&NaturalGasTitle/0.1/OCABundle.json",
-                "digest": "",
-            },
-            {"type": "JsonSchema", "id": "", "digest": ""},
-            {"type": "JsonLDContext", "id": "", "digest": ""},
+            {"type": "expiry_date", "name": "expiry_date", "path": "$.validUntil"}
         ],
         "proof": [
             {
                 "type": "DataIntegrityProof",
                 "cryptosuite": "eddsa-jcs-2022",
-                "verificationMethod": "did:web:untp.traceability.site:parties:regulators:director-of-petroleum-lands#multikey",
+                "verificationMethod": TEST_KID,
                 "proofPurpose": "authentication",
                 "proofValue": "z17CzsxiNiugmX9CYseEkoXxjMqBDxyasiwWwZ58AD5ctKJLjSeoEmSBvj5VVxzATFfpwKdfRmjqLn2wRMhb9jHV",
             }
         ],
-    }
+    },
+    "options": {"issuerId": TEST_DID}
 }
 
 secured_credential_spec = {
     "options": {
         "format": "vc_di",
-        "type": "BCPetroleum&NaturalGasTitle",
+        "type": TEST_CREDENTIAL_TYPE,
         "version": "0.0.3",
-        "credentialId": "203296ac-6d8f-4988-9d7f-d23d3ca36db4",
+        "credentialId": TEST_CREDENTIAL_ID,
+        "issuedId": TEST_DID
     },
-    "securedDocument": {
+    "verifiablePresentation": {
         "@context": ["https://www.w3.org/ns/credentials/v2"],
-        "type": ["VerifiableCredential", "BCPetroleum&NaturalGasTitle"],
-        "id": "https://orgbook.devops.gov.bc.ca/entities/81011e4c-979d-436c-b98c-9412daafd5de/credentials/203296ac-6d8f-4988-9d7f-d23d3ca36db4",
+        "type": ["VerifiablePresentation"],
+        "verifiableCredential":[{"@context": ["https://www.w3.org/ns/credentials/v2"],
+        "type": ["VerifiableCredential", TEST_CREDENTIAL_TYPE],
+        "id": TEST_CREDENTIAL_ID,
         "issuer": {
-            "id": "did:web:untp.traceability.site:parties:regulators:director-of-petroleum-lands#multikey"
+            "id": TEST_DID
         },
         "validFrom": "2024-08-12T05:44:20+00:00",
         "validUntil": "2025-08-12T05:44:20+00:00",
@@ -97,10 +93,10 @@ secured_credential_spec = {
             {
                 "type": "DataIntegrityProof",
                 "cryptosuite": "eddsa-jcs-2022",
-                "verificationMethod": "did:web:untp.traceability.site:parties:regulators:director-of-petroleum-lands#multikey",
+                "verificationMethod": TEST_KID,
                 "proofPurpose": "assertionMethod",
                 "proofValue": "z2Nr9eDUfBzircv484R3u7vzdxARh5D8vsbj4ohFRQZhkq2PTdJ9YsLfF18mafaPMtchV5EefmovvFoFbFNmLqrWW",
             }
-        ],
+        ]}],
     },
 }

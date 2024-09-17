@@ -52,7 +52,7 @@ async def store_credential(request_body: StoreCredentialRequest):
         vcr_mapped = VCRCredential(credential=vc, options=options).model_dump()
 
         # Store the credential
-        await vcr_service.store_credential(vcr_mapped)
+        # await vcr_service.store_credential(vcr_mapped)
 
         return JSONResponse(status_code=201, content=vcr_mapped)
     except Exception as e:

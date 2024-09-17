@@ -28,7 +28,7 @@ class CredentialMapping(Path):
     path: str = Field(example="$.validFrom")
 
 
-class CredentialType(CredentialTypeOptions, BaseModel):
+class CredentialType(BaseModel):
     """CredentialType schema"""
 
     type: str = Field(example="ExampleCredential")
