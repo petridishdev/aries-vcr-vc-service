@@ -1,5 +1,5 @@
-from enums import CredentialMappingTypeEnum
-from schemas import Path
+from app.enums import CredentialMappingTypeEnum
+from app.schemas import Path
 
 
 class CredentialMapping(Path):

@@ -1,10 +1,10 @@
 from typing import Annotated
 
 from fastapi import Body
-from schemas import SecuredDocument, SignedCredential, Options
+from app.schemas import SecuredDocument, SignedCredential, CredentialOptions
 
 
-class SecuredCredentialOptions(Options):
+class SecuredCredentialOptions(CredentialOptions):
     """SecuredCredentialOptions schema"""
 
     credential_id: Annotated[

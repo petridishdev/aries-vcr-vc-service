@@ -14,11 +14,12 @@ async def register_credential_type(credential_type):
     ) as client:
         response = await client.post("/vc_di_credential_type/", json=credential_type)
         response.raise_for_status()
-        return response.json()
+        # TODO: Log the response
+        print(response.json())
 
 
-async def issue_credential(credential):
-    """Issue a new credential"""
+async def store_credential(credential):
+    """Store a new credential"""
 
     # Make an HTTP request to the Aries VCR API
     async with AsyncClient(
@@ -26,4 +27,5 @@ async def issue_credential(credential):
     ) as client:
         response = await client.post("/vc_di_credential/", json=credential)
         response.raise_for_status()
-        return response.json()
+        # TODO: Log the response
+        print(response.json())

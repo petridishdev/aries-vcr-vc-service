@@ -1,4 +1,4 @@
-from schemas import Signed, CredentialType
+from app.schemas import Signed, CredentialType
 
 
 class SignedCredentialType(Signed, CredentialType):

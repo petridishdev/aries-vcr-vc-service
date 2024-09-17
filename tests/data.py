@@ -75,7 +75,7 @@ secured_credential_spec = {
         "format": "vc_di",
         "type": "BCPetroleum&NaturalGasTitle",
         "version": "0.0.3",
-        "credentialId": "203296ac-6d8f-4988-9d7f-d23d3ca36db4"
+        "credentialId": "203296ac-6d8f-4988-9d7f-d23d3ca36db4",
     },
     "securedDocument": {
         "@context": ["https://www.w3.org/ns/credentials/v2"],
@@ -102,5 +102,5 @@ secured_credential_spec = {
                 "proofValue": "z2Nr9eDUfBzircv484R3u7vzdxARh5D8vsbj4ohFRQZhkq2PTdJ9YsLfF18mafaPMtchV5EefmovvFoFbFNmLqrWW",
             }
         ],
-    }
+    },
 }

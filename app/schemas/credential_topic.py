@@ -1,7 +1,7 @@
 from typing import Annotated
 from fastapi import Body
 from pydantic import BaseModel
-from schemas import Path
+from app.schemas import Path
 
 
 class CredentialTopic(BaseModel):

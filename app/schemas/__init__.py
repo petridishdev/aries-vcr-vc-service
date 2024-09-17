@@ -1,5 +1,5 @@
-from .data_integrity_proof import DataIntegrityProof
-from .options import Options
+from .proof import DataIntegrityProof
+from .options import CredentialOptions, CredentialTypeOptions
 from .path import Path
 from .secured_document import SecuredDocument
 from .signed import Signed
@@ -17,7 +17,8 @@ __all__ = [
     "CredentialTopic",
     "CredentialType",
     "DataIntegrityProof",
-    "Options",
+    "CredentialOptions",
+    "CredentialTypeOptions",
     "Path",
     "SecuredDocument",
     "Signed",

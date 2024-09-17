@@ -1,6 +1,6 @@
 from pydantic import BaseModel
 
-from schemas import DataIntegrityProof
+from app.schemas import DataIntegrityProof
 
 
 class Signed(BaseModel):

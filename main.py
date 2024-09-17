@@ -1,12 +1,4 @@
-from fastapi import FastAPI
+import uvicorn
 
-from routers.credential import router as credential
-from routers.credential_type import router as credential_type
-
-app = FastAPI()
-app.include_router(credential)
-app.include_router(credential_type)
-
-@app.get("/health")
-async def health_check():
-    return {"status": "ok"}
+if __name__ == "__main__":
+    uvicorn.run("app:app", host="0.0.0.0", port=8080, proxy_headers=True)

@@ -1,7 +1,7 @@
 from typing import Annotated
 from fastapi import Body
 from pydantic import BaseModel
-from schemas import Signed
+from app.schemas import Signed
 
 
 class SignedCredential(Signed, BaseModel):
