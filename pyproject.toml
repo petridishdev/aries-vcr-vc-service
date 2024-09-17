@@ -11,6 +11,10 @@ fastapi = {extras = ["standard"], version = "^0.112.0"}
 pytest = "^8.3.2"
 httpx = "^0.27.0"
 pydantic-settings = "^2.5.0"
+canonicaljson = "^2.0.0"
+uvicorn = "^0.30.6"
+aries-askar = "^0.3.2"
+multiformats = "^0.3.1.post4"
 
 
 [build-system]
