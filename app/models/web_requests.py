@@ -6,27 +6,27 @@ from .presentation import Presentation
 from .credential_type import CredentialType
 
 
-class BaseModel(BaseModel):
+class WebBaseModel(BaseModel):
     def model_dump(self, **kwargs) -> Dict[str, Any]:
         return super().model_dump(by_alias=True, exclude_none=True, **kwargs)
 
 
-class RegisterCredentialTypeRequest(BaseModel):
+class RegisterCredentialTypeRequest(WebBaseModel):
     credential_type: CredentialType = Field(alias="credentialType")
     options: CredentialTypeOptions = Field()
 
 
-class RegisterCredentialTypeResponse(BaseModel):
+class RegisterCredentialTypeResponse(WebBaseModel):
     status: bool = Field(example=True)
     credential_type: CredentialType = Field(alias="credentialType")
 
 
-class StoreCredentialRequest(BaseModel):
+class StoreCredentialRequest(WebBaseModel):
     verifiable_presentation: Presentation = Field(alias="verifiablePresentation")
     options: CredentialOptions = Field()
 
 
-class StoreCredentialResponse(BaseModel):
+class StoreCredentialResponse(WebBaseModel):
     status: bool = Field(example=True)
     replaced: bool = Field(example=False)
     credential: Credential = Field()

@@ -3,8 +3,8 @@ from fastapi import APIRouter, Response, status, HTTPException
 from fastapi.responses import JSONResponse
 from config import settings
 
-from app.schemas.web_requests import StoreCredentialRequest, StoreCredentialResponse
-from app.schemas.mappings.vcr_credential import VCRCredential
+from app.models.web_requests import StoreCredentialRequest, StoreCredentialResponse
+from app.models.mappings.vcr_credential import VCRCredential
 from app.services import vcr as vcr_service
 from app.services import Verifier
 
@@ -31,7 +31,7 @@ async def store_credential(request_body: StoreCredentialRequest):
         vp = request_body.model_dump()["verifiablePresentation"]
         options = request_body.model_dump()["options"]
 
-        # # Pre verification checks
+        # Pre verification checks
         # assert options["issuerId"] in settings.ISSUERS, "Unknown issuer"
 
         # Verify VP proof to authenticate the caller
@@ -52,12 +52,12 @@ async def store_credential(request_body: StoreCredentialRequest):
         vcr_mapped = VCRCredential(credential=vc, options=options).model_dump()
 
         # Store the credential
-        # await vcr_service.store_credential(vcr_mapped)
+        await vcr_service.store_credential(vcr_mapped)
 
         return JSONResponse(status_code=201, content=vcr_mapped)
     except Exception as e:
         # TODO: Log the error
         print(e)
         raise HTTPException(
-            status_code=500, detail="There was an error storing the credential"
+            status_code=500, detail="There was an error storing the credential."
         )

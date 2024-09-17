@@ -4,12 +4,12 @@ from ..credential import Credential
 from ..options import CredentialOptions
 
 
-class BaseModel(BaseModel):
+class EfficientBaseModel(BaseModel):
     def model_dump(self, **kwargs) -> Dict[str, Any]:
         return super().model_dump(by_alias=True, exclude_none=True, **kwargs)
 
 
-class VCRCredential(BaseModel):
+class VCRCredential(EfficientBaseModel):
     """VCRCredential schema"""
 
     credential: Credential
@@ -23,9 +23,9 @@ class VCRCredential(BaseModel):
             "format": self.options.credential_format,
             "schema": self.options.credential_type,
             "version": self.options.credential_version,
-            "origin_did": self.credential.issuer['id'],
+            "origin_did": self.credential.issuer["id"],
             "credential_id": self.credential.id,
-            "credential": self.credential,
+            "raw_data": self.credential,
         }
 
         return model_dump

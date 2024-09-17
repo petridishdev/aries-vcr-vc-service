@@ -1,17 +1,17 @@
 from typing import Any, Dict
 from pydantic import model_serializer, BaseModel
 
-from app.enums import CredentialMappingTypeEnum
+from app.models.enums import CredentialMappingTypeEnum
 from ..credential_type import CredentialType
 from ..options import CredentialTypeOptions
 
 
-class BaseModel(BaseModel):
+class EfficientBaseModel(BaseModel):
     def model_dump(self, **kwargs) -> Dict[str, Any]:
         return super().model_dump(by_alias=True, exclude_none=True, **kwargs)
 
 
-class VCRCredentialType(BaseModel):
+class VCRCredentialType(EfficientBaseModel):
     """VCRCredentialType schema"""
 
     credential_type: CredentialType
