@@ -12,4 +12,4 @@ RUN poetry install --no-root --only main
 
 COPY ../ ./
 
-CMD ["fastapi", "run", "main.py", "--port", "8080", "--proxy-headers"]
+CMD [ "python", "main.py" ]
