@@ -11,13 +11,13 @@ class AskarVerifier:
     def __init__(self):
         self.type = "DataIntegrityProof"
         self.cryptosuite = "eddsa-jcs-2022"
-        self.purpose = "assertionMethod"
+        self.purpose = "authentication"
         self.issuers = [issuer["id"] for issuer in settings.ISSUERS]
 
     def verify_secured_document(self, document):
         proof = document.pop("proof")[0]
         self._assert_proof(proof)
-        # self._verify_proof(document, proof)
+        self._verify_proof(document, proof)
 
     def _verify_proof(self, document, proof):
         try:
@@ -27,7 +27,8 @@ class AskarVerifier:
                 sha256(canonicaljson.encode_canonical_json(document)).digest()
                 + sha256(canonicaljson.encode_canonical_json(proof)).digest()
             )
-            if not self.key.verify_signature(message=hash_data, signature=signature):
+            verified = self.key.verify_signature(message=hash_data, signature=signature)
+            if not verified:
                 raise HTTPException(
                     status_code=400, detail="Signature was forged or corrupt."
                 )
