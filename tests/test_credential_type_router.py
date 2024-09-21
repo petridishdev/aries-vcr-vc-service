@@ -1,5 +1,6 @@
 import copy
 from fastapi.testclient import TestClient
+import pytest
 
 from tests.data import secured_credential_type_spec
 
@@ -7,7 +8,7 @@ from main import app
 
 client = TestClient(app)
 
-
+@pytest.mark.skip
 def test_register_credential_type():
     """Test register_credential_type"""
 

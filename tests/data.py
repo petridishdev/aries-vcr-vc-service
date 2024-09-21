@@ -43,11 +43,6 @@ secured_credential_type_spec = {
         "mappings": [
             {"type": "effective_date", "name": "effective_date", "path": "$.validFrom"},
             {"type": "expiry_date", "name": "expiry_date", "path": "$.validUntil"},
-            # {
-            #     "type": "title_holder",
-            #     "name": "title_holder",
-            #     "path": "$.credentialSubject.issuedTo.legalName",
-            # },
         ],
         "resources": [
             {
@@ -75,12 +70,12 @@ secured_credential_spec = {
         "format": "vc_di",
         "type": "BCPetroleum&NaturalGasTitle",
         "version": "0.0.3",
-        "credentialId": "203296ac-6d8f-4988-9d7f-d23d3ca36db4"
+        "credentialId": "123456",
     },
     "securedDocument": {
         "@context": ["https://www.w3.org/ns/credentials/v2"],
         "type": ["VerifiableCredential", "BCPetroleum&NaturalGasTitle"],
-        "id": "https://orgbook.devops.gov.bc.ca/entities/81011e4c-979d-436c-b98c-9412daafd5de/credentials/203296ac-6d8f-4988-9d7f-d23d3ca36db4",
+        "id": "https://localhost:8080/api/vc/topic/0f95da2f-1485-4848-a93c-8abebc223e41/credential/123456",
         "issuer": {
             "id": "did:web:untp.traceability.site:parties:regulators:director-of-petroleum-lands#multikey"
         },
@@ -88,9 +83,9 @@ secured_credential_spec = {
         "validUntil": "2025-08-12T05:44:20+00:00",
         "credentialSubject": {
             "issuedTo": {
-                "id": "https://orgbook.gov.bc.ca/entity/81011e4c-979d-436c-b98c-9412daafd5de",
+                "id": "https://orgbook.gov.bc.ca/api/vc/topic/0f95da2f-1485-4848-a93c-8abebc223e41",
                 "legalName": "PACIFIC CANBRIAM ENERGY LIMITED",
-                "identifier": "81011e4c-979d-436c-b98c-9412daafd5de",
+                "identifier": "0f95da2f-1485-4848-a93c-8abebc223e41",
             }
         },
         "proof": [
@@ -102,5 +97,5 @@ secured_credential_spec = {
                 "proofValue": "z2Nr9eDUfBzircv484R3u7vzdxARh5D8vsbj4ohFRQZhkq2PTdJ9YsLfF18mafaPMtchV5EefmovvFoFbFNmLqrWW",
             }
         ],
-    }
+    },
 }

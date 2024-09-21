@@ -17,7 +17,7 @@ def test_valid_vcr_credential_type_output():
     assert vcr_credential_type_output == {
         "format": "vc_di",
         "schema": "BCPetroleum&NaturalGasTitle",
-        "version": "0.2",
+        "version": "0.0.3",
         "origin_did": "did:web:untp.traceability.site:parties:regulators:director-of-petroleum-lands",
         "topic": {
             "type": "my-registration.city-of-vancouver",
