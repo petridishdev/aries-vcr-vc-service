@@ -20,7 +20,7 @@ class VCRCredentialType(SecuredDocument[SignedCredentialType]):
             "version": secured_document.version,
             "origin_did": secured_document.origin_did,
             "topic": secured_document.topic.model_dump(mode="json"),
-            "raw_data": self.raw_data,
+            "raw_data": self._raw_data,
         }
 
         if secured_document.mappings:

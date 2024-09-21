@@ -20,7 +20,7 @@ class VCRCredential(SecuredCredentialWithOptions):
             "version": options.version,
             "origin_did": secured_document.origin_did,
             "credential_id": options.credential_id,
-            "raw_data": self.raw_data,
+            "raw_data": self._raw_data,
         }
 
         return model_dump
