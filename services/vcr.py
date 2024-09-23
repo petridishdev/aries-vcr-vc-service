@@ -1,5 +1,7 @@
 """Service to call Aries VCR API."""
 
+import json
+from fastapi import Response
 from httpx import AsyncClient
 
 from config import settings
@@ -34,9 +36,13 @@ async def get_credential(credential_id: str):
 
     # Make an HTTP request to the Aries VCR API
     async with AsyncClient(base_url=f"{settings.aries_vcr_url}/api") as client:
+        headers = {
+            "Accept": "application/json, application/ld+json"
+        }
         response = await client.get(
             f"/credential/{credential_id}",
             params={"raw_data": "true"},
+            headers=headers,
         )
         response.raise_for_status()
-        return response.json()
+        return Response(content=json.dumps(response.json()), media_type="application/ld+json")
