@@ -1,5 +1,5 @@
 from config import settings
-import requests
+from httpx import AsyncClient
 from fastapi import HTTPException
 from aries_askar.bindings import LocalKeyHandle
 from aries_askar import Key
@@ -12,16 +12,27 @@ class AskarVerifier:
         self.type = "DataIntegrityProof"
         self.cryptosuite = "eddsa-jcs-2022"
         self.purpose = "authentication"
-        self.issuers = [issuer["id"] for issuer in settings.ISSUERS]
+        self.issuers = [issuer["id"] for issuer in settings.issuers]
 
-    def verify_secured_document(self, document):
+    async def verify_secured_document(self, document):
         proof = document.pop("proof")[0]
-        self._assert_proof(proof)
-        self._verify_proof(document, proof)
+        await self._assert_proof(proof)
+        await self._verify_proof(document, proof)
 
-    def _verify_proof(self, document, proof):
+    async def _assert_proof(self, proof):
         try:
-            self._resolve_verification_method(proof["verificationMethod"])
+            assert proof["type"] == self.type, "Invalid proof type"
+            assert proof["cryptosuite"] == self.cryptosuite, "Invalid cryptosuite"
+            assert proof["proofPurpose"] == self.purpose, "Invalid proof purpose"
+            assert (
+                proof["verificationMethod"].split("#")[0] in self.issuers
+            ), "Unknown issuer"
+        except AssertionError as msg:
+            raise HTTPException(status_code=400, detail=str(msg))
+
+    async def _verify_proof(self, document, proof):
+        try:
+            await self._resolve_verification_method(proof["verificationMethod"])
             signature = multibase.decode(proof.pop("proofValue"))
             hash_data = (
                 sha256(canonicaljson.encode_canonical_json(document)).digest()
@@ -35,20 +46,10 @@ class AskarVerifier:
         except:
             raise HTTPException(status_code=400, detail="Error verifying proof.")
 
-    def _assert_proof(self, proof):
-        try:
-            assert proof["type"] == self.type, "Invalid proof type"
-            assert proof["cryptosuite"] == self.cryptosuite, "Invalid cryptosuite"
-            assert proof["proofPurpose"] == self.purpose, "Invalid proof purpose"
-            assert (
-                proof["verificationMethod"].split("#")[0] in self.issuers
-            ), "Unknown issuer"
-        except AssertionError as msg:
-            raise HTTPException(status_code=400, detail=str(msg))
-
-    def _resolve_verification_method(self, kid):
+    async def _resolve_verification_method(self, kid):
         did = kid.split("#")[0]
-        r = requests.get(f"https://{did[8:].replace(':', '/')}/did.json")
+        async with AsyncClient() as client:
+            r = await client.get(f"https://{did[8:].replace(':', '/')}/did.json")
         try:
             did_doc = r.json()
             multikey = next(

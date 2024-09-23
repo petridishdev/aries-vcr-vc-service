@@ -35,7 +35,8 @@ async def issue_credential(secured_credential: SecuredCredentialWithOptions):
             by_alias=True, exclude_none=True
         )
         
-        Verifier().verify_secured_document(secured_credential_data['raw_data'].copy())
+        verifier = Verifier()
+        await verifier.verify_secured_document(secured_credential_data['raw_data'].copy())
 
         vcr_credential = VCRCredential(**secured_credential_data)
 

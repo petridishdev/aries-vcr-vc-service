@@ -40,7 +40,8 @@ async def register_credential_type(
             by_alias=True, exclude_none=True
         )
         
-        Verifier().verify_secured_document(secured_credential_type_data['raw_data'].copy())
+        verifier = Verifier()
+        await verifier.verify_secured_document(secured_credential_type_data['raw_data'].copy())
         
         vcr_credential_type = VCRCredentialType(**secured_credential_type_data)
 
