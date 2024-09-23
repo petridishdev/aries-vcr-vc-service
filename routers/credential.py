@@ -4,6 +4,7 @@ from fastapi import APIRouter, Response, status
 from schemas import SecuredCredentialWithOptions
 from schemas.mappings.vcr_credential import VCRCredential
 from services import vcr as vcr_service
+from services import Verifier
 
 router = APIRouter(prefix="/credentials", tags=["credentials"], redirect_slashes=False)
 
@@ -33,6 +34,10 @@ async def issue_credential(secured_credential: SecuredCredentialWithOptions):
         secured_credential_data = secured_credential.model_dump(
             by_alias=True, exclude_none=True
         )
+        
+        verifier = Verifier()
+        await verifier.verify_secured_document(secured_credential_data['raw_data'].copy())
+
         vcr_credential = VCRCredential(**secured_credential_data)
 
         data = vcr_credential.model_dump(by_alias=True, exclude_none=True)

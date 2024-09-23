@@ -4,6 +4,7 @@ from fastapi import APIRouter, Response, status
 from schemas import SecuredDocument, SignedCredentialType
 from schemas.mappings import VCRCredentialType
 from services import vcr as vcr_service
+from services import Verifier
 
 router = APIRouter(
     prefix="/credential-types",
@@ -38,6 +39,10 @@ async def register_credential_type(
         secured_credential_type_data = secured_credential_type.model_dump(
             by_alias=True, exclude_none=True
         )
+        
+        verifier = Verifier()
+        await verifier.verify_secured_document(secured_credential_type_data['raw_data'].copy())
+        
         vcr_credential_type = VCRCredentialType(**secured_credential_type_data)
 
         # TODO: This needs to have a defined schema
