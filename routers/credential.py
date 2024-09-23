@@ -35,7 +35,7 @@ async def get_credentials(credential_id: str):
         return Response(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             content=json.dumps({"error": "There was an error getting the credential"}),
-            media_type="application/json",
+            media_type="application/ld+json",
         )
 
 
