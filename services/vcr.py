@@ -1,13 +1,14 @@
 """Service to call Aries VCR API."""
 
 import json
+from typing import Any
 from fastapi import Response
 from httpx import AsyncClient
 
 from config import settings
 
 
-async def register_credential_type(credential_type: dict):
+async def register_credential_type(credential_type: dict) -> Any:
     """Register a new credential type"""
 
     # Make an HTTP request to the Aries VCR API
@@ -19,7 +20,7 @@ async def register_credential_type(credential_type: dict):
         return response.json()
 
 
-async def issue_credential(credential: dict):
+async def issue_credential(credential: dict) -> Any:
     """Issue a new credential"""
 
     # Make an HTTP request to the Aries VCR API
@@ -31,7 +32,7 @@ async def issue_credential(credential: dict):
         return response.json()
 
 
-async def get_credential(credential_id: str):
+async def get_credential(credential_id: str) -> Response:
     """Get a credential from its UUID"""
 
     # Make an HTTP request to the Aries VCR API
