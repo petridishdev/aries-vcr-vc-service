@@ -3,10 +3,10 @@ from pydantic_settings import BaseSettings
 
 class Settings(BaseSettings):
     project_title: str = "Aries VCR VC Service"
-    
+
     aries_vcr_url: str = "http://host.docker.internal:8080"
 
-    issuers: list = [
+    issuers: list[dict] = [
         {
             "id": "did:web:test.digitaltrust.traceability.site:petroleum-and-natural-gas-act:director-of-petroleum-lands",
             "name": "Director of Petroleum Lands",
