@@ -12,7 +12,7 @@ class AskarVerifier:
     def __init__(self):
         self.type = "DataIntegrityProof"
         self.cryptosuite = "eddsa-jcs-2022"
-        self.purpose = "authentication"
+        self.purpose = "assertionMethod"
         self.issuers = [issuer["id"] for issuer in settings.issuers]
 
     async def verify_secured_document(self, document: dict):
