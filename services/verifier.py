@@ -14,10 +14,16 @@ class AskarVerifier:
         self.purpose = "authentication"
         self.issuers = [issuer["id"] for issuer in settings.issuers]
 
-    async def verify_secured_document(self, document):
+    async def verify_secured_document(self, document: dict):
         proof = document.pop("proof")[0]
         await self._assert_proof(proof)
         await self._verify_proof(document, proof)
+
+    async def resolve_issuer(self, did: str):
+        issuer = next((issuer for issuer in settings.issuers if issuer["id"] == did), None)
+        if not issuer:
+            raise HTTPException(status_code=400, detail="Unknown issuer")
+        return issuer
 
     async def _assert_proof(self, proof):
         try:
