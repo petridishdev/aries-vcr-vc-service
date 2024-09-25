@@ -8,6 +8,18 @@ from httpx import AsyncClient
 from config import settings
 
 
+async def register_issuer(issuer: dict) -> Any:
+    """Register a new issuer"""
+
+    # Make an HTTP request to the Aries VCR API
+    async with AsyncClient(
+        base_url=f"{settings.aries_vcr_url}/agentcb/topic"
+    ) as client:
+        response = await client.post("/vc_di_issuer/", json=issuer)
+        response.raise_for_status()
+        return response.json()
+
+
 async def register_credential_type(credential_type: dict) -> Any:
     """Register a new credential type"""
 
@@ -37,13 +49,13 @@ async def get_credential(credential_id: str) -> Response:
 
     # Make an HTTP request to the Aries VCR API
     async with AsyncClient(base_url=f"{settings.aries_vcr_url}/api") as client:
-        headers = {
-            "Accept": "application/json, application/ld+json"
-        }
+        headers = {"Accept": "application/json, application/ld+json"}
         response = await client.get(
             f"/credential/{credential_id}",
             params={"raw_data": "true"},
             headers=headers,
         )
         response.raise_for_status()
-        return Response(content=json.dumps(response.json()), media_type="application/ld+json")
+        return Response(
+            content=json.dumps(response.json()), media_type="application/ld+json"
+        )

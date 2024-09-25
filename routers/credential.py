@@ -54,13 +54,12 @@ async def issue_credential(secured_credential: SecuredCredentialWithOptions):
     """Issue a new credential"""
 
     try:
+        verifier = Verifier()
+        await verifier.verify_secured_document(secured_credential.raw_data)
+
         secured_credential_data = secured_credential.model_dump(
             by_alias=True, exclude_none=True
         )
-        
-        verifier = Verifier()
-        await verifier.verify_secured_document(secured_credential_data['raw_data'].copy())
-
         vcr_credential = VCRCredential(**secured_credential_data)
 
         data = vcr_credential.model_dump(by_alias=True, exclude_none=True)

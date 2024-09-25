@@ -22,3 +22,8 @@ class SecuredDocument(BaseModel, Generic[SecuredDocumentT]):
         super().__init__(**data)
 
         self._raw_data = data.get("securedDocument")
+
+    @property
+    def raw_data(self) -> dict:
+        """Get the raw data"""
+        return self._raw_data

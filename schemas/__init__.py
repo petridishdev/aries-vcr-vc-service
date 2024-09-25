@@ -1,4 +1,5 @@
 from .data_integrity_proof import DataIntegrityProof
+from .issuer import Issuer
 from .options import Options
 from .path import Path
 from .secured_document import SecuredDocument
@@ -17,6 +18,7 @@ __all__ = [
     "CredentialTopic",
     "CredentialType",
     "DataIntegrityProof",
+    "Issuer",
     "Options",
     "Path",
     "SecuredDocument",
