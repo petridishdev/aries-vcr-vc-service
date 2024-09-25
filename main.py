@@ -9,6 +9,7 @@ app = FastAPI(title=settings.project_title)
 app.include_router(credential)
 app.include_router(credential_type)
 
+
 @app.get("/health")
 async def health_check():
     return {"status": "ok"}

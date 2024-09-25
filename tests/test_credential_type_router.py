@@ -8,6 +8,7 @@ from main import app
 
 client = TestClient(app)
 
+
 @pytest.mark.skip
 def test_register_credential_type():
     """Test register_credential_type"""

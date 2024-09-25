@@ -18,7 +18,7 @@ class Settings(BaseSettings):
         {
             "id": "did:web:opsecid.github.io:acapy-did-web-demo",
             "name": "Demo Issuer",
-        }
+        },
     ]
 
 

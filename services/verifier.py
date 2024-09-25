@@ -7,6 +7,7 @@ from multiformats import multibase
 from hashlib import sha256
 import canonicaljson
 
+
 class AskarVerifier:
     def __init__(self):
         self.type = "DataIntegrityProof"
@@ -20,7 +21,9 @@ class AskarVerifier:
         await self._verify_proof(document, proof)
 
     async def resolve_issuer(self, did: str):
-        issuer = next((issuer for issuer in settings.issuers if issuer["id"] == did), None)
+        issuer = next(
+            (issuer for issuer in settings.issuers if issuer["id"] == did), None
+        )
         if not issuer:
             raise HTTPException(status_code=400, detail="Unknown issuer")
         return issuer
@@ -61,7 +64,7 @@ class AskarVerifier:
             multikey = next(
                 (
                     verification_method["publicKeyMultibase"]
-                    for verification_method in did_doc['verificationMethod']
+                    for verification_method in did_doc["verificationMethod"]
                     if verification_method["id"] == kid
                 ),
                 None,
