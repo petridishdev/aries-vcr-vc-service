@@ -36,20 +36,21 @@ async def register_credential_type(
     """Register a new credential type"""
 
     try:
+        verifier = Verifier()
+        await verifier.verify_secured_document(secured_credential_type.raw_data)
+        issuer = await verifier.resolve_issuer(
+            secured_credential_type.secured_document.origin_did
+        )
+
         secured_credential_type_data = secured_credential_type.model_dump(
             by_alias=True, exclude_none=True
         )
-        
-        verifier = Verifier()
-        await verifier.verify_secured_document(secured_credential_type_data['raw_data'].copy())
-        
         vcr_credential_type = VCRCredentialType(**secured_credential_type_data)
 
-        # TODO: This needs to have a defined schema
         data = {
             "issuer": {
-                "name": "test-issuer",
-                "did": secured_credential_type.secured_document.origin_did,
+                "name": issuer.get("name"),
+                "did": issuer.get("id"),
                 "abbreviation": "",
                 "email": "",
                 "url": "",
