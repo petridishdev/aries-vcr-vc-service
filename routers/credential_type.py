@@ -38,6 +38,7 @@ async def register_credential_type(
     try:
         verifier = Verifier()
         await verifier.verify_secured_document(secured_credential_type.raw_data)
+
         issuer = await verifier.resolve_issuer(
             secured_credential_type.secured_document.origin_did
         )
