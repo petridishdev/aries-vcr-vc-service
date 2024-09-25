@@ -11,8 +11,13 @@
             "module": "uvicorn",
             "args": [
                 "main:app",
+                "--port",
+                "3333",
                 "--reload"
             ],
+            "env": {
+                "ARIES_VCR_URL": "http://host.docker.internal:8008",
+            },
             "jinja": true
         },
         {

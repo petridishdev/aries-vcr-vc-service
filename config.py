@@ -15,6 +15,10 @@ class Settings(BaseSettings):
             "id": "did:web:test.digitaltrust.traceability.site:mines-act:chief-permitting-officer",
             "name": "Chief Permitting Officer",
         },
+        {
+            "id": "did:web:opsecid.github.io:acapy-did-web-demo",
+            "name": "Demo Issuer",
+        }
     ]
 
 
