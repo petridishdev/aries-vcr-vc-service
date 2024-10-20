@@ -64,20 +64,20 @@ class AskarVerifier:
             raise HTTPException(status_code=400, detail=str(msg))
 
     async def _verify_proof(self, document, proof):
-        # try:
-        await self._resolve_verification_method(proof["verificationMethod"])
-        signature = multibase.decode(proof.pop("proofValue"))
-        hash_data = (
-            sha256(canonicaljson.encode_canonical_json(proof)).digest()
-            + sha256(canonicaljson.encode_canonical_json(document)).digest()
-        )
-        verified = self.key.verify_signature(message=hash_data, signature=signature)
-        if not verified:
-            raise HTTPException(
-                status_code=400, detail="Signature was forged or corrupt."
+        try:
+            await self._resolve_verification_method(proof["verificationMethod"])
+            signature = multibase.decode(proof.pop("proofValue"))
+            hash_data = (
+                sha256(canonicaljson.encode_canonical_json(proof)).digest()
+                + sha256(canonicaljson.encode_canonical_json(document)).digest()
             )
-        # except:
-        #     raise HTTPException(status_code=400, detail="Error verifying proof.")
+            verified = self.key.verify_signature(message=hash_data, signature=signature)
+            if not verified:
+                raise HTTPException(
+                    status_code=400, detail="Signature was forged or corrupt."
+                )
+        except:
+            raise HTTPException(status_code=400, detail="Error verifying proof.")
 
     async def _resolve_verification_method(self, kid):
         did = kid.split("#")[0]
