@@ -40,18 +40,20 @@ class AskarVerifier:
         proof = document.pop("proof")[0]
         await self._assert_proof(proof)
         await self._verify_proof(document, proof)
-
-    async def resolve_issuer(self, did: str):
-        issuer = next(
+        
+    def get_issuer(self, did: str):
+        return next(
             (issuer for issuer in self.issuers if issuer['id'] == did), None
         )
-        if not issuer:
+
+    async def resolve_issuer(self, did: str):
+        if not self.get_issuer(did):
             self.refresh_issuer_registry()
-            issuer = next(
-                (issuer for issuer in self.issuers if issuer['id'] == did), None
-            )
-            if not issuer:
-                raise HTTPException(status_code=400, detail="Unknown issuer")
+            
+        issuer = self.get_issuer(did)
+        if not issuer:
+            raise HTTPException(status_code=400, detail="Unknown issuer")
+        
         return issuer
 
     async def _assert_proof(self, proof):
