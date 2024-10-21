@@ -10,14 +10,15 @@ import json
 import httpx
 import os
 
+
 def cache_issuer_registry():
     r = httpx.get(os.environ["ISSUER_REGISTRY_URL"])
-    issuers = r.json()['issuers']
-    
+    issuers = r.json()["issuers"]
+
     # TODO, implement python in memory caching and ttl
-    with open('issuers.json', 'w+') as f:
+    with open("issuers.json", "w+") as f:
         f.write(json.dumps(issuers))
-        
+
     return issuers
 
 
@@ -26,10 +27,10 @@ class AskarVerifier:
         self.type = "DataIntegrityProof"
         self.cryptosuite = "eddsa-jcs-2022"
         self.purpose = "assertionMethod"
-        
-        with open('issuers.json', 'r') as f:
+
+        with open("issuers.json", "r") as f:
             issuers = json.loads(f.read())
-            
+
         self.issuers = [issuer for issuer in issuers]
 
     async def refresh_issuer_registry(self):
@@ -40,20 +41,18 @@ class AskarVerifier:
         proof = document.pop("proof")[0]
         await self._assert_proof(proof)
         await self._verify_proof(document, proof)
-        
+
     def get_issuer(self, did: str):
-        return next(
-            (issuer for issuer in self.issuers if issuer['id'] == did), None
-        )
+        return next((issuer for issuer in self.issuers if issuer["id"] == did), None)
 
     async def resolve_issuer(self, did: str):
         if not self.get_issuer(did):
             self.refresh_issuer_registry()
-            
+
         issuer = self.get_issuer(did)
         if not issuer:
             raise HTTPException(status_code=400, detail="Unknown issuer")
-        
+
         return issuer
 
     async def _assert_proof(self, proof):
@@ -61,7 +60,9 @@ class AskarVerifier:
             assert proof["type"] == self.type, "Invalid proof type"
             assert proof["cryptosuite"] == self.cryptosuite, "Invalid cryptosuite"
             assert proof["proofPurpose"] == self.purpose, "Invalid proof purpose"
-            assert await self.resolve_issuer(proof["verificationMethod"].split("#")[0]), "Unknown issuer"
+            assert await self.resolve_issuer(
+                proof["verificationMethod"].split("#")[0]
+            ), "Unknown issuer"
         except AssertionError as msg:
             raise HTTPException(status_code=400, detail=str(msg))
 
