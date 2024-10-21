@@ -5,6 +5,7 @@ services:
      dockerfile: docker/Dockerfile
     environment:
       ARIES_VCR_URL: ${ARIES_VCR_URL:-http://vcr-api:8080}
+      ISSUER_REGISTRY_URL: ${ISSUER_REGISTRY_URL}
     ports:
       - "3333:8080"
     networks:
