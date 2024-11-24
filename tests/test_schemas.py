@@ -219,6 +219,7 @@ def test_valid_credential_type_schema():
             "source_id": topic_spec.get("sourceId"),
         },
         "mappings": credential_type_spec.get("mappings"),
+        "cardinality": credential_type_spec.get("cardinality"),
     }
 
 
@@ -240,6 +241,7 @@ def test_valid_credential_type_schema_no_mappings():
             "type": topic_spec.get("type"),
             "source_id": topic_spec.get("sourceId"),
         },
+        "cardinality": credential_type_spec.get("cardinality"),
     }
     assert "mappings" not in credential_type_output
 
@@ -263,7 +265,9 @@ def test_valid_credential_type_schema_empty_mappings():
             "source_id": topic_spec.get("sourceId"),
         },
         "mappings": [],
+        "cardinality": credential_type_spec.get("cardinality"),
     }
+    assert "mappings" in credential_type_output
 
 
 def test_invalid_credential_type_schema_missing_format():
@@ -416,3 +420,72 @@ def test_invalid_credential_type_schema_invalid_mappings():
     assert errors.get("msg") == "Input should be a valid list"
     assert "mappings" in errors.get("loc")
     assert errors.get("type") == "list_type"
+
+
+def test_invalid_credential_type_schema_invalid_cardinality():
+    """Test invalid CredentialType schema invalid cardinality"""
+
+    test_data = {
+        **credential_type_spec.copy(),
+        "cardinality": "invalid",
+    }
+
+    with pytest.raises(ValidationError) as exc_info:
+        CredentialType(**test_data)
+
+    errors = exc_info.value.errors()[0]
+
+    assert errors.get("msg") == "Input should be a valid list"
+    assert "cardinality" in errors.get("loc")
+    assert errors.get("type") == "list_type"
+
+
+def test_valid_credential_type_schema_cardinality_missing():
+    """Test valid CredentialType schema cardinality missing"""
+
+    test_data = {
+        **credential_type_spec.copy(),
+        "cardinality": None,
+    }
+
+    credential_type = CredentialType(**test_data)
+    credential_type_output = credential_type.model_dump(exclude_none=True)
+
+    assert credential_type_output == {
+        "format": str(credential_type_spec.get("format")),
+        "type": credential_type_spec.get("type"),
+        "version": credential_type_spec.get("version"),
+        "verification_methods": credential_type_spec.get("verificationMethods"),
+        "topic": {
+            "type": topic_spec.get("type"),
+            "source_id": topic_spec.get("sourceId"),
+        },
+        "mappings": credential_type_spec.get("mappings"),
+    }
+    assert "cardinality" not in credential_type_output
+
+
+def test_valid_credential_type_schema_cardinality_empty():
+    """Test valid CredentialType schema valid cardinality empty list"""
+
+    test_data = {
+        **credential_type_spec.copy(),
+        "cardinality": [],
+    }
+
+    credential_type = CredentialType(**test_data)
+    credential_type_output = credential_type.model_dump(exclude_none=True)
+
+    assert credential_type_output == {
+        "format": str(credential_type_spec.get("format")),
+        "type": credential_type_spec.get("type"),
+        "version": credential_type_spec.get("version"),
+        "verification_methods": credential_type_spec.get("verificationMethods"),
+        "topic": {
+            "type": topic_spec.get("type"),
+            "source_id": topic_spec.get("sourceId"),
+        },
+        "mappings": credential_type_spec.get("mappings"),
+        "cardinality": [],
+    }
+    assert "cardinality" in credential_type_output

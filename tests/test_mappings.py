@@ -18,9 +18,9 @@ def test_valid_vcr_credential_type_output():
         "format": "vc_di",
         "schema": "BCPetroleum&NaturalGasTitle",
         "version": "0.0.3",
-        "origin_did": "did:web:untp.traceability.site:parties:regulators:director-of-petroleum-lands",
+        "origin_did": "did:web:registry-dev.apps.silver.devops.gov.bc.ca:petroleum-and-natural-gas-act:director-of-petroleum-lands",
         "topic": {
-            "type": "my-registration.city-of-vancouver",
+            "type": "registration.bc-registries",
             "source_id": {"path": "$.credentialSubject.issuedTo.identifier"},
         },
         "mappings": [
@@ -34,6 +34,9 @@ def test_valid_vcr_credential_type_output():
                 "name": "expiry_date",
                 "path": "$.validUntil",
             },
+        ],
+        "cardinality": [
+            {"path": "$.credentialSubject.issuedTo.id"},
         ],
         "credential": {
             "effective_date": {

@@ -16,7 +16,6 @@ def test_issue_credential():
     response = client.post(
         "/credential-types/", json=copy.deepcopy(secured_credential_type_spec)
     )
-    print(response.json())
     assert response.status_code == 201
 
     response = client.post("/credentials/", json=copy.deepcopy(secured_credential_spec))

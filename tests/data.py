@@ -15,6 +15,10 @@ expiry_date_mapping_spec = {
     "path": "$.path.to.credential.expiry_date",
 }
 
+credential_subject_cardinality_spec = {
+    "path": "$.path.to.credentialSubject.id",
+}
+
 credential_type_spec = {
     "format": "vc_di",
     "type": "BCPetroleum&NaturalGasTitle",
@@ -25,6 +29,9 @@ credential_type_spec = {
         effective_date_mapping_spec,
         expiry_date_mapping_spec,
     ],
+    "cardinality": [
+        credential_subject_cardinality_spec,
+    ],
 }
 
 secured_credential_type_spec = {
@@ -34,15 +41,18 @@ secured_credential_type_spec = {
         "name": "BC Petroleum & Natural Gas Title",
         "version": "0.0.3",
         "verificationMethods": [
-            "did:web:untp.traceability.site:parties:regulators:director-of-petroleum-lands#multikey"
+            "did:web:registry-dev.apps.silver.devops.gov.bc.ca:petroleum-and-natural-gas-act:director-of-petroleum-lands#multikey"
         ],
         "topic": {
-            "type": "my-registration.city-of-vancouver",
+            "type": "registration.bc-registries",
             "sourceId": {"path": "$.credentialSubject.issuedTo.identifier"},
         },
         "mappings": [
             {"type": "effective_date", "name": "effective_date", "path": "$.validFrom"},
             {"type": "expiry_date", "name": "expiry_date", "path": "$.validUntil"},
+        ],
+        "cardinality": [
+            {"path": "$.credentialSubject.issuedTo.id"},
         ],
         "resources": [
             {
@@ -57,7 +67,7 @@ secured_credential_type_spec = {
             {
                 "type": "DataIntegrityProof",
                 "cryptosuite": "eddsa-jcs-2022",
-                "verificationMethod": "did:web:untp.traceability.site:parties:regulators:director-of-petroleum-lands#multikey",
+                "verificationMethod": "did:web:registry-dev.apps.silver.devops.gov.bc.ca:petroleum-and-natural-gas-act:director-of-petroleum-lands#multikey",
                 "proofPurpose": "authentication",
                 "proofValue": "z17CzsxiNiugmX9CYseEkoXxjMqBDxyasiwWwZ58AD5ctKJLjSeoEmSBvj5VVxzATFfpwKdfRmjqLn2wRMhb9jHV",
             }
@@ -75,24 +85,24 @@ secured_credential_spec = {
     "securedDocument": {
         "@context": ["https://www.w3.org/ns/credentials/v2"],
         "type": ["VerifiableCredential", "BCPetroleum&NaturalGasTitle"],
-        "id": "https://localhost:8080/api/vc/topic/0f95da2f-1485-4848-a93c-8abebc223e41/credential/123456",
+        "id": "https://localhost:8080/api/vc/topic/d6499ae0-4f9f-453b-93e7-07f4585ff703/credential/123456",
         "issuer": {
-            "id": "did:web:untp.traceability.site:parties:regulators:director-of-petroleum-lands#multikey"
+            "id": "did:web:registry-dev.apps.silver.devops.gov.bc.ca:petroleum-and-natural-gas-act:director-of-petroleum-lands#multikey"
         },
         "validFrom": "2024-08-12T05:44:20+00:00",
         "validUntil": "2025-08-12T05:44:20+00:00",
         "credentialSubject": {
             "issuedTo": {
-                "id": "https://orgbook.gov.bc.ca/api/vc/topic/0f95da2f-1485-4848-a93c-8abebc223e41",
+                "id": "https://orgbook.gov.bc.ca/api/vc/topic/d6499ae0-4f9f-453b-93e7-07f4585ff703-2",
                 "legalName": "PACIFIC CANBRIAM ENERGY LIMITED",
-                "identifier": "0f95da2f-1485-4848-a93c-8abebc223e41",
+                "identifier": "d6499ae0-4f9f-453b-93e7-07f4585ff703",
             }
         },
         "proof": [
             {
                 "type": "DataIntegrityProof",
                 "cryptosuite": "eddsa-jcs-2022",
-                "verificationMethod": "did:web:untp.traceability.site:parties:regulators:director-of-petroleum-lands#multikey",
+                "verificationMethod": "did:web:registry-dev.apps.silver.devops.gov.bc.ca:petroleum-and-natural-gas-act:director-of-petroleum-lands#multikey",
                 "proofPurpose": "assertionMethod",
                 "proofValue": "z2Nr9eDUfBzircv484R3u7vzdxARh5D8vsbj4ohFRQZhkq2PTdJ9YsLfF18mafaPMtchV5EefmovvFoFbFNmLqrWW",
             }

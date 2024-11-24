@@ -41,4 +41,10 @@ class VCRCredentialType(SecuredDocument[SignedCredentialType]):
                 mapping.model_dump(mode="json") for mapping in secured_document.mappings
             ]
 
+        if secured_document.cardinality:
+            model_dump["cardinality"] = [
+                cardinality.model_dump(mode="json")
+                for cardinality in secured_document.cardinality
+            ]
+
         return model_dump

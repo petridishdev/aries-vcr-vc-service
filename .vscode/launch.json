@@ -16,7 +16,8 @@
                 "--reload"
             ],
             "env": {
-                "ARIES_VCR_URL": "http://host.docker.internal:8008",
+                "ISSER_REGISTRY_URL": "https://bcgov.github.io/digital-trust-toolkit/registrations/issuers/dev.json",
+                "ARIES_VCR_URL": "http://host.docker.internal:8080",
             },
             "jinja": true
         },

@@ -1,7 +1,7 @@
 from typing import Annotated
 
 from fastapi import Body
-from schemas import CredentialMapping, CredentialTopic, Options
+from schemas import CredentialMapping, CredentialTopic, Options, Path
 from pydantic import BaseModel
 
 
@@ -18,3 +18,4 @@ class CredentialType(Options, BaseModel):
     oca_bundle: Annotated[dict | None, Body(validation_alias="ocaBundle")] = None
     topic: CredentialTopic
     mappings: list[CredentialMapping] | None = None
+    cardinality: list[Path] | None = None
